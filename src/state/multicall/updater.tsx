@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Multicall2 } from '../../abis/types'
 import { useActiveWeb3React } from '../../hooks/web3'
 import { useMulticall2Contract } from '../../hooks/useContract'
 import useDebounce from '../../hooks/useDebounce'
@@ -23,7 +22,7 @@ import {
  * @param minBlockNumber minimum block number of the result set
  */
 async function fetchChunk(
-  multicall2Contract: Multicall2,
+  multicall2Contract: any,
   chunk: Call[],
   minBlockNumber: number
 ): Promise<{

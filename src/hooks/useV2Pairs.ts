@@ -4,6 +4,8 @@ import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.
 import { Interface } from '@ethersproject/abi'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
 import { Currency, CurrencyAmount } from '@uniswap/sdk-core'
+import { getCreate2Address } from '@ethersproject/address'
+import { pack, keccak256 } from '@ethersproject/solidity'
 
 const PAIR_INTERFACE = new Interface(IUniswapV2PairABI)
 
@@ -12,6 +14,20 @@ export enum PairState {
   NOT_EXISTS,
   EXISTS,
   INVALID,
+}
+
+const MONAD_FACTORY_ADDRESS = '0xb48dBe6D4130f4a664075250EE702715748051d9'
+const MONAD_INIT_CODE_HASH = '0x67bc0babb7c46b28f84870387b02369e61d55e3b07da260cfeb73b382d275293'
+
+function computeMonadPairAddress(tokenA: Currency, tokenB: Currency): string {
+  const [token0, token1] = tokenA.wrapped.sortsBefore(tokenB.wrapped)
+    ? [tokenA.wrapped, tokenB.wrapped]
+    : [tokenB.wrapped, tokenA.wrapped]
+  return getCreate2Address(
+    MONAD_FACTORY_ADDRESS,
+    keccak256(['bytes'], [pack(['address', 'address'], [token0.address, token1.address])]),
+    MONAD_INIT_CODE_HASH
+  )
 }
 
 export function useV2Pairs(currencies: [Currency | undefined, Currency | undefined][]): [PairState, Pair | null][] {
@@ -23,7 +39,8 @@ export function useV2Pairs(currencies: [Currency | undefined, Currency | undefin
   const pairAddresses = useMemo(
     () =>
       tokens.map(([tokenA, tokenB]) => {
-        return tokenA && tokenB && !tokenA.equals(tokenB) ? Pair.getAddress(tokenA, tokenB) : undefined
+        if (!(tokenA && tokenB) || tokenA.equals(tokenB)) return undefined
+        return tokenA.chainId === 143 ? computeMonadPairAddress(tokenA, tokenB) : Pair.getAddress(tokenA, tokenB)
       }),
     [tokens]
   )

@@ -80,7 +80,9 @@
     "multicodec": "^3.0.1",
     "multihashes": "^4.0.2",
     "node-vibrant": "^3.1.5",
+    "patch-package": "^8.0.1",
     "polished": "^3.3.2",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.2.1",
     "qs": "^6.9.4",
     "react": "^17.0.1",
@@ -120,18 +122,27 @@
     "@walletconnect/web3-provider": "1.4.2-rc.2"
   },
   "scripts": {
-    "compile-contract-types": "yarn compile-external-abi-types && yarn compile-v3-contract-types",
+    "compile-contract-types": "yarn compile-external-abi-types && yarn compile-v3-contract-types && node -e \"require('fs').appendFileSync('src/abis/types/index.ts','\\nexport {}\\n')\"",
     "compile-external-abi-types": "typechain --target ethers-v5 --out-dir src/abis/types './src/abis/**/*.json'",
-    "compile-v3-contract-types": "typechain --target ethers-v5 --out-dir src/types/v3 './node_modules/@uniswap/?(v3-core|v3-periphery)/artifacts/contracts/**/*.json'",
-    "build": "yarn compile-contract-types && react-scripts build",
+    "compile-v3-contract-types": "typechain --target ethers-v5 --out-dir src/types/v3 \"./node_modules/@uniswap/v3-core/artifacts/contracts/**/*.json\" \"./node_modules/@uniswap/v3-periphery/artifacts/contracts/**/*.json\"",
+    "build": "yarn compile-contract-types && cross-env GENERATE_SOURCEMAP=false NODE_OPTIONS=--openssl-legacy-provider CI=false react-scripts build",
     "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'",
-    "postinstall": "yarn compile-contract-types",
-    "start": "yarn compile-contract-types && react-scripts start",
+    "postinstall": "yarn compile-contract-types && patch-package",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
+    "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
     "storybook": "start-storybook -p 6006",
     "test": "react-scripts test --env=jsdom"
   },
   "eslintConfig": {
     "extends": "react-app",
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ]
+    },
     "ignorePatterns": [
       "node_modules"
     ]

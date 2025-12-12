@@ -19,12 +19,15 @@ import TransactionUpdater from './state/transactions/updater'
 import UserUpdater from './state/user/updater'
 import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
 import getLibrary from './utils/getLibrary'
+import { Token, WETH9 } from '@uniswap/sdk-core'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
 if (!!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
 }
+
+;(WETH9 as any)[143] = new Token(143, '0xFfDFF1bAb47d8e6D1Da119F5C925fAC91FAfA899', 18, 'WMON', 'Wrapped Monad')
 
 const GOOGLE_ANALYTICS_ID: string | undefined = process.env.REACT_APP_GOOGLE_ANALYTICS_ID
 if (typeof GOOGLE_ANALYTICS_ID === 'string') {

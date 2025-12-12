@@ -10,6 +10,8 @@ import { NetworkConnector } from './NetworkConnector'
 import UNISWAP_LOGO_URL from '../assets/svg/logo.svg'
 
 const INFURA_KEY = process.env.REACT_APP_INFURA_KEY
+const CUSTOM_NETWORK_URL = process.env.REACT_APP_NETWORK_URL || process.env.REACT_APP_NODE_1
+const CUSTOM_CHAIN_ID = parseInt(process.env.REACT_APP_CHAIN_ID ?? '1')
 const FORMATIC_KEY = process.env.REACT_APP_FORTMATIC_KEY
 const PORTIS_ID = process.env.REACT_APP_PORTIS_ID
 const WALLETCONNECT_BRIDGE_URL = process.env.REACT_APP_WALLETCONNECT_BRIDGE_URL
@@ -28,11 +30,15 @@ const NETWORK_URLS: {
   [42]: `https://kovan.infura.io/v3/${INFURA_KEY}`,
 }
 
-const SUPPORTED_CHAIN_IDS = [1, 4, 3, 42, 5]
+const SUPPORTED_CHAIN_IDS = [1, 4, 3, 42, 5, 143]
 
 export const network = new NetworkConnector({
-  urls: NETWORK_URLS,
-  defaultChainId: 1,
+  urls: {
+    ...NETWORK_URLS,
+    ...(CUSTOM_NETWORK_URL ? { [CUSTOM_CHAIN_ID]: CUSTOM_NETWORK_URL } : {}),
+    143: CUSTOM_NETWORK_URL ?? NETWORK_URLS[1],
+  },
+  defaultChainId: CUSTOM_CHAIN_ID,
 })
 
 let networkLibrary: Web3Provider | undefined

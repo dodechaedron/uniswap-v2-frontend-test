@@ -1,0 +1,30 @@
+diff --git a/node_modules/@uniswap/v2-sdk/dist/v2-sdk.cjs.development.js b/node_modules/@uniswap/v2-sdk/dist/v2-sdk.cjs.development.js
+index d0e8c06..cbbbd6c 100644
+--- a/node_modules/@uniswap/v2-sdk/dist/v2-sdk.cjs.development.js
++++ b/node_modules/@uniswap/v2-sdk/dist/v2-sdk.cjs.development.js
+@@ -10,8 +10,8 @@ var invariant = _interopDefault(require('tiny-invariant'));
+ var solidity = require('@ethersproject/solidity');
+ var address = require('@ethersproject/address');
+ 
+-var FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
+-var INIT_CODE_HASH = '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f';
++var FACTORY_ADDRESS = '0xb48dBe6D4130f4a664075250EE702715748051d9';
++var INIT_CODE_HASH = '0x67bc0babb7c46b28f84870387b02369e61d55e3b07da260cfeb73b382d275293';
+ var MINIMUM_LIQUIDITY = /*#__PURE__*/JSBI.BigInt(1000); // exports for internal consumption
+ 
+ var ZERO = /*#__PURE__*/JSBI.BigInt(0);
+diff --git a/node_modules/@uniswap/v2-sdk/dist/v2-sdk.esm.js b/node_modules/@uniswap/v2-sdk/dist/v2-sdk.esm.js
+index a84edc0..6acbe79 100644
+--- a/node_modules/@uniswap/v2-sdk/dist/v2-sdk.esm.js
++++ b/node_modules/@uniswap/v2-sdk/dist/v2-sdk.esm.js
+@@ -4,8 +4,8 @@ import invariant from 'tiny-invariant';
+ import { keccak256, pack } from '@ethersproject/solidity';
+ import { getCreate2Address } from '@ethersproject/address';
+ 
+-var FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
+-var INIT_CODE_HASH = '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f';
++var FACTORY_ADDRESS = '0xb48dBe6D4130f4a664075250EE702715748051d9';
++var INIT_CODE_HASH = '0x67bc0babb7c46b28f84870387b02369e61d55e3b07da260cfeb73b382d275293';
+ var MINIMUM_LIQUIDITY = /*#__PURE__*/JSBI.BigInt(1000); // exports for internal consumption
+ 
+ var ZERO = /*#__PURE__*/JSBI.BigInt(0);

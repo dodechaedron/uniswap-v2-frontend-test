@@ -19,13 +19,30 @@ function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean):
   const userAddedTokens = useUserAddedTokens()
 
   return useMemo(() => {
-    if (!chainId) return {}
+    if (!chainId || !tokenMap[chainId]) return {}
 
     // reduce to just tokens
     const mapWithoutUrls = Object.keys(tokenMap[chainId]).reduce<{ [address: string]: Token }>((newMap, address) => {
       newMap[address] = tokenMap[chainId][address].token
       return newMap
     }, {})
+
+    if (chainId === 143) {
+      mapWithoutUrls['0x28dD3002Ca0040eAc4037759c9b372Ca66051af6'] = new Token(
+        143,
+        '0x28dD3002Ca0040eAc4037759c9b372Ca66051af6',
+        18,
+        'MMF',
+        'Meme Finance'
+      )
+      mapWithoutUrls['0xFfDFF1bAb47d8e6D1Da119F5C925fAC91FAfA899'] = new Token(
+        143,
+        '0xFfDFF1bAb47d8e6D1Da119F5C925fAC91FAfA899',
+        18,
+        'WMON',
+        'Wrapped Monad'
+      )
+    }
 
     if (includeUserAdded) {
       return (
@@ -48,8 +65,23 @@ function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean):
 }
 
 export function useAllTokens(): { [address: string]: Token } {
+  const { chainId } = useActiveWeb3React()
   const allTokens = useCombinedActiveList()
-  return useTokensFromMap(allTokens, true)
+  const map = useTokensFromMap(allTokens, true)
+
+  return useMemo(() => {
+    if (chainId !== 143) return map
+    const newMap = { ...map }
+    const MMF_ADDRESS = '0x28dD3002Ca0040eAc4037759c9b372Ca66051af6'
+    if (!newMap[MMF_ADDRESS]) {
+      newMap[MMF_ADDRESS] = new Token(143, MMF_ADDRESS, 18, 'MMF', 'Meme Finance')
+    }
+    const WMON_ADDRESS = '0xFfDFF1bAb47d8e6D1Da119F5C925fAC91FAfA899'
+    if (!newMap[WMON_ADDRESS]) {
+      newMap[WMON_ADDRESS] = new Token(143, WMON_ADDRESS, 18, 'WMON', 'Wrapped Monad')
+    }
+    return newMap
+  }, [map, chainId])
 }
 
 export function useUnsupportedTokens(): { [address: string]: Token } {
@@ -173,7 +205,7 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 
 export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
   const { chainId } = useActiveWeb3React()
-  const isETH = currencyId?.toUpperCase() === 'ETH'
+  const isETH = currencyId?.toUpperCase() === 'ETH' || currencyId?.toUpperCase() === 'MON'
   const token = useToken(isETH ? undefined : currencyId)
   return isETH ? (chainId ? Ether.onChain(chainId) : undefined) : token
 }

@@ -132,7 +132,7 @@ export default function Pool() {
           {t('Create a pool')}
         </MenuItem>
       ),
-      link: '/add/ETH',
+      link: '/add/MON',
       external: false,
     },
     {
@@ -190,7 +190,7 @@ export default function Pool() {
                     </MoreOptionsButton>
                   )}
                 />
-                <ResponsiveButtonPrimary id="join-pool-button" as={Link} to="/add/ETH">
+                <ResponsiveButtonPrimary id="join-pool-button" as={Link} to="/add/MON">
                   + {t('New Position')}
                 </ResponsiveButtonPrimary>
               </ButtonRow>

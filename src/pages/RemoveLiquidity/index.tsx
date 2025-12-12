@@ -104,21 +104,11 @@ export default function RemoveLiquidity({
   const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], router?.address)
 
   async function onAttemptToApprove() {
-    if (!pairContract || !pair || !library || !deadline) throw new Error('missing dependencies')
-    const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
-    if (!liquidityAmount) throw new Error('missing liquidity amount')
-
-    if (gatherPermitSignature) {
-      try {
-        await gatherPermitSignature()
-      } catch (error) {
-        // try to approve if gatherPermitSignature failed for any reason other than the user rejecting it
-        if (error?.code !== 4001) {
-          await approveCallback()
-        }
-      }
-    } else {
+    if (!pair) return
+    try {
       await approveCallback()
+    } catch (error) {
+      console.error('Approve failed', error)
     }
   }
 
@@ -531,11 +521,11 @@ export default function RemoveLiquidity({
                           </StyledInternalLink>
                         ) : oneCurrencyIsWETH ? (
                           <StyledInternalLink
-                            to={`/remove/v2/${currencyA?.equals(WETH9[chainId]) ? 'ETH' : currencyIdA}/${
-                              currencyB?.equals(WETH9[chainId]) ? 'ETH' : currencyIdB
+                            to={`/remove/v2/${currencyA?.equals(WETH9[chainId]) ? 'MON' : currencyIdA}/${
+                              currencyB?.equals(WETH9[chainId]) ? 'MON' : currencyIdB
                             }`}
                           >
-                            Receive ETH
+                            Receive MON
                           </StyledInternalLink>
                         ) : null}
                       </RowBetween>
