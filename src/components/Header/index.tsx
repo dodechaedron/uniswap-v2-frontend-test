@@ -6,7 +6,6 @@ import { darken } from 'polished'
 import { useTranslation } from 'react-i18next'
 import { Moon, Sun } from 'react-feather'
 import styled from 'styled-components/macro'
-import { FACTORY_ADDRESS, INIT_CODE_HASH } from '@uniswap/v2-sdk'
 
 import Logo from '../../assets/svg/logo.svg'
 import LogoDark from '../../assets/svg/logo_white.svg'
@@ -371,12 +370,6 @@ export default function Header() {
               <NetworkCard title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}</NetworkCard>
             )}
           </HideSmall>
-          <Text fontSize={12} color="text2">
-            Factory: {FACTORY_ADDRESS}
-          </Text>
-          <Text fontSize={12} color="text2">
-            Hash: {INIT_CODE_HASH}
-          </Text>
           {availableClaim && !showClaimPopup && (
             <UNIWrapper onClick={toggleClaimModal}>
               <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
