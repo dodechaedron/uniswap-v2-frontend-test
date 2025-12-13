@@ -125,7 +125,7 @@
     "compile-contract-types": "yarn compile-external-abi-types && yarn compile-v3-contract-types && node -e \"require('fs').appendFileSync('src/abis/types/index.ts','\\nexport {}\\n')\"",
     "compile-external-abi-types": "typechain --target ethers-v5 --out-dir src/abis/types './src/abis/**/*.json'",
     "compile-v3-contract-types": "typechain --target ethers-v5 --out-dir src/types/v3 \"./node_modules/@uniswap/v3-core/artifacts/contracts/**/*.json\" \"./node_modules/@uniswap/v3-periphery/artifacts/contracts/**/*.json\"",
-    "build": "yarn compile-contract-types && cross-env GENERATE_SOURCEMAP=false NODE_OPTIONS=--openssl-legacy-provider CI=false react-scripts build",
+    "build": "npx patch-package && yarn compile-contract-types && cross-env GENERATE_SOURCEMAP=false NODE_OPTIONS=--openssl-legacy-provider CI=false react-scripts build",
     "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'",
     "postinstall": "patch-package",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
