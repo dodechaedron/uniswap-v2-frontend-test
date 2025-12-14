@@ -320,14 +320,17 @@ export function useSwapCallback(
           call: { address, calldata, value },
         } = bestCallOption
 
+        const fallbackGasLimit = chainId === 143 ? BigNumber.from(3000000) : BigNumber.from(500000)
+        const gasLimitToUse =
+          'gasEstimate' in bestCallOption ? calculateGasMargin(bestCallOption.gasEstimate) : fallbackGasLimit
+
         return library
           .getSigner()
           .sendTransaction({
             from: account,
             to: address,
             data: calldata,
-            // let the wallet try if we can't estimate the gas
-            ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
+            gasLimit: gasLimitToUse,
             ...(value && !isZero(value) ? { value } : {}),
           })
           .then((response) => {

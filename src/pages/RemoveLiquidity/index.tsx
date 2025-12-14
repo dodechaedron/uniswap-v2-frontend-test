@@ -352,7 +352,7 @@ export default function RemoveLiquidity({
             </RowBetween>
           </>
         )}
-        <ButtonPrimary disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)} onClick={onRemove}>
+        <ButtonPrimary disabled={approval !== ApprovalState.APPROVED} onClick={onRemove}>
           <Text fontWeight={500} fontSize={20}>
             Confirm
           </Text>
@@ -601,15 +601,15 @@ export default function RemoveLiquidity({
                 <RowBetween>
                   <ButtonConfirmed
                     onClick={onAttemptToApprove}
-                    confirmed={approval === ApprovalState.APPROVED || signatureData !== null}
-                    disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
+                    confirmed={approval === ApprovalState.APPROVED}
+                    disabled={approval !== ApprovalState.NOT_APPROVED}
                     mr="0.5rem"
                     fontWeight={500}
                     fontSize={16}
                   >
                     {approval === ApprovalState.PENDING ? (
                       <Dots>Approving</Dots>
-                    ) : approval === ApprovalState.APPROVED || signatureData !== null ? (
+                    ) : approval === ApprovalState.APPROVED ? (
                       'Approved'
                     ) : (
                       'Approve'
@@ -619,7 +619,7 @@ export default function RemoveLiquidity({
                     onClick={() => {
                       setShowConfirm(true)
                     }}
-                    disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
+                    disabled={!isValid || approval !== ApprovalState.APPROVED}
                     error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
                   >
                     <Text fontSize={16} fontWeight={500}>
